@@ -95,6 +95,7 @@ public class SkillCaster : MonoBehaviour
         Arrow ar = go.GetComponent<Arrow>();
         if (ar != null)
         {
+            ar.SetOwnerTeam(team);
             if (Mathf.Abs(speedMul - 1f) > 0.001f) ar.MulTravelSpeed(speedMul);
             if (damageAdd != 0) ar.SetDamageAdd(damageAdd);
             ar.Launch(start, target);

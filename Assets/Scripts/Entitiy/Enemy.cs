@@ -6,19 +6,26 @@ public class Enemy : MonoBehaviour
 {
     // ----- 이동/경계 -----
     [Header("Movement")] [SerializeField] float moveSpeed = 3f;
+    [SerializeField] float arriveEpsilon = 0.3f; // 도착 판정 오차
     [SerializeField] Transform leftBound; // 플랫폼 왼쪽 끝
     [SerializeField] Transform rightBound; // 플랫폼 오른쪽 끝
-    [SerializeField] float arriveEpsilon = 0.3f; // 도착 판정 오차
 
     // ----- 공격 타임 설정 -----
-    [Header("Attack Time")] [SerializeField]
-    float basicTimeMin = 1f; // 일반공격 타임 최소
-
+    [Header("Attack Time")]
+    [SerializeField]float basicTimeMin = 1f; // 일반공격 타임 최소
     [SerializeField] float basicTimeMax = 4f; // 일반공격 타임 최대
     [SerializeField] float skillChance = 0.35f; // 공격타임 시작 시 스킬 선택 확률(0~1)
     [SerializeField] bool randomIncludeQ = true; // 랜덤 스킬 후보에 Q 포함 여부
 
-
+    // ----- 평타 주기(애니 트리거 반복) -----
+    [Header("Basic Attack")]
+    [SerializeField] float basicIntervalMin = 0.7f;
+    [SerializeField] float basicIntervalMax = 1.2f;
+    float nextBasicTime;
+    
+    [Header("Shooting")]
+    [SerializeField] private float playerAimOffsetX = -0.5f;
+    
     // 내부 상태
     enum State
     {
@@ -26,7 +33,6 @@ public class Enemy : MonoBehaviour
         AttackBasic,
         AttackSkill
     }
-
     State state = State.Move;
 
     private SkillCaster caster;
@@ -63,6 +69,7 @@ public class Enemy : MonoBehaviour
         }
 
         PickNewTargetX();
+        ScheduleNextBasic();
     }
 
     void FixedUpdate()
@@ -134,6 +141,7 @@ public class Enemy : MonoBehaviour
             if (anim) 
                 anim.SetTrigger("Attack");
             isAttacking = true;
+            ScheduleNextBasic();
         }
 
         // 시간 끝나면 이동으로 전환
@@ -182,6 +190,11 @@ public class Enemy : MonoBehaviour
             targetX = transform.position.x; // 경계가 없으면 제자리(안전)
     }
 
+    void ScheduleNextBasic()
+    {
+        nextBasicTime = Time.time + Random.Range(basicIntervalMin, basicIntervalMax);
+    }
+    
     void TryCastRandomSkillOnce()
     {
         if (caster == null) return;
@@ -213,8 +226,10 @@ public class Enemy : MonoBehaviour
     // 기본공격 발사 프레임에서 호출
     public void AE_Enemy_Shoot()
     {
-        
-        
+        if (caster == null || playerTransform == null) return;
+        Vector2 start  = (caster.firePos != null) ? (Vector2)caster.firePos.position : (Vector2)transform.position;
+        Vector2 target = (Vector2)playerTransform.position + new Vector2(playerAimOffsetX, 0f);
+        caster.SpawnArrow(start, target);
         
         // if (caster == null || playerTransform == null) return;
         // caster.TryCast(SkillSlot.Q, playerTransform); // Q 슬롯을 '적 기본사격' SO로 세팅해두자

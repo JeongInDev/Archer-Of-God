@@ -96,42 +96,79 @@ public class Arrow : MonoBehaviour
     {
         Debug.Log($"Arrow hit {other.name} tag:{other.tag}");
 
-        
-        // ★ 충돌이 발생했으니 자동 삭제 타이머 중지
+        // 자동 삭제 타이머 정지
         if (autoKillCo != null) { StopCoroutine(autoKillCo); autoKillCo = null; }
 
         if (!flying) return;
 
-        if (other.CompareTag("Enemy"))
-        {
-            // 1) IDamageable 우선
-            IDamageable dmg;
-            if (other.TryGetComponent<IDamageable>(out dmg))
-            {
-                var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
-                dmg.ApplyDamage(info);
-            }
-            else
-            {
-                // 2) IDamageable이 없다면 Health 직접 찾기(폴백)
-                Health hp;
-                if (other.TryGetComponent<Health>(out hp))
-                {
-                    var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
-                    hp.ApplyDamage(info);
-                }
-            }
-
-            Destroy(gameObject); // 적 맞으면 화살 파괴(연출은 취향대로)
-            return;
-        }
-        else if (other.CompareTag("Ground"))
+        // 1) 땅(바리케이드 포함) 처리
+        if (other.CompareTag("Ground"))
         {
             flying = false;
-            StopAllCoroutines();        // 그 자리에서 멈춤
+            StopAllCoroutines();
             if (_collider2D) _collider2D.enabled = false;
             StartCoroutine(FadeAndDie());
+            return;
         }
+
+        // 2) 타격 가능한 대상 찾기 (IDamageable 우선, 없으면 Health)
+        IDamageable dmg = null;
+        Health hp = null;
+
+        if (!other.TryGetComponent<IDamageable>(out dmg))
+            other.TryGetComponent<Health>(out hp);
+
+        // 타격 대상이 없으면 무시
+        if (dmg == null && hp == null) return;
+
+        // 3) 팀 판정: 소유팀과 같으면 기본적으로 무시 (friendlyFire=false)
+        Team targetTeam = (dmg != null) ? dmg.Team : hp.Team;
+        if (targetTeam == ownerTeam) return;
+
+        // 4) 데미지 적용
+        var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
+
+        if (dmg != null)        dmg.ApplyDamage(info);
+        else /* hp != null */   hp.ApplyDamage(info);
+
+        // 5) 명중 시 화살 파괴
+        Destroy(gameObject);
+        
+        // // ★ 충돌이 발생했으니 자동 삭제 타이머 중지
+        // if (autoKillCo != null) { StopCoroutine(autoKillCo); autoKillCo = null; }
+        //
+        // if (!flying) return;
+        //
+        // if (other.CompareTag("Enemy"))
+        // {
+        //     // 1) IDamageable 우선
+        //     IDamageable dmg;
+        //     if (other.TryGetComponent<IDamageable>(out dmg))
+        //     {
+        //         var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
+        //         dmg.ApplyDamage(info);
+        //     }
+        //     else
+        //     {
+        //         // 2) IDamageable이 없다면 Health 직접 찾기(폴백)
+        //         Health hp;
+        //         if (other.TryGetComponent<Health>(out hp))
+        //         {
+        //             var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
+        //             hp.ApplyDamage(info);
+        //         }
+        //     }
+        //
+        //     Destroy(gameObject); // 적 맞으면 화살 파괴(연출은 취향대로)
+        //     return;
+        // }
+        // else if (other.CompareTag("Ground"))
+        // {
+        //     flying = false;
+        //     StopAllCoroutines();        // 그 자리에서 멈춤
+        //     if (_collider2D) _collider2D.enabled = false;
+        //     StartCoroutine(FadeAndDie());
+        // }
     }
     
     IEnumerator AutoDestroyAfter(float seconds)
