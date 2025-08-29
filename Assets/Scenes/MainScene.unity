@@ -1371,8 +1371,8 @@ MonoBehaviour:
   team: 0
   firePos: {fileID: 4714424366358512344}
   arrowPrefab: {fileID: 1051298090223956220, guid: 41015ba4e825bc84db7bf9d55e60e362, type: 3}
-  skillQ: {fileID: 0}
-  skillW: {fileID: 0}
+  skillQ: {fileID: 11400000, guid: 2a7d97dd1a3713d4a93111dd5f7b2b21, type: 2}
+  skillW: {fileID: 11400000, guid: 289842c0ce8b3a5409050d76a02bfc1a, type: 2}
   skillE: {fileID: 0}
   skillR: {fileID: 0}
 --- !u!1 &1312175110

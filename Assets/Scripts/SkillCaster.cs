@@ -12,13 +12,23 @@ public class SkillCaster : MonoBehaviour
     public GameObject arrowPrefab;    // 화살 프리팹
 
     [Header("Slots")]
-    public SkillData skillQ, skillW, skillE, skillR;
+    public SkillData skillQ;
+    public SkillData skillW;
+    public SkillData skillE;
+    public SkillData skillR;
 
     // 쿨다운(remaining time)
-    float cooldownQ;
-    float cooldownW;
-    float cooldownE;
-    float cooldownR;
+    private float cooldownQ;
+    private float cooldownW;
+    private float cooldownE;
+    private float cooldownR;
+    
+    // ── W 버프 상태 ──
+    private bool wBuffActive = false;
+    private float wBuffEndTime = 0;
+    private float wSpeedMulCache = 1f;
+    private float wScaleMulCache = 1f;
+    private int   wDamageAddCache = 0;
     
     void Update()
     {
@@ -27,6 +37,12 @@ public class SkillCaster : MonoBehaviour
         if (cooldownW > 0f) cooldownW -= dt;
         if (cooldownE > 0f) cooldownE -= dt;
         if (cooldownR > 0f) cooldownR -= dt;
+        
+        // 버프 만료 처리
+        if (wBuffActive && Time.time > wBuffEndTime)
+        {
+            wBuffActive = false;
+        }
     }
 
     public bool TryCast(SkillSlot slot, Transform target = null)
@@ -34,15 +50,15 @@ public class SkillCaster : MonoBehaviour
         SkillData data = GetData(slot);
         if (data == null) return false;
 
-        float remain = GetRemainingCooldown(slot);
-        if (remain > 0f) return false;
+        if (GetRemainingCooldown(slot) > 0f)
+            return false;
 
         SkillContext ctx = new SkillContext();
-        ctx.caster   = this;
-        ctx.team     = team;
-        ctx.firePos  = (firePos != null) ? firePos : transform;
-        ctx.target   = target;
-        ctx.targetPos= (target != null) ? (Vector2)target.position : Vector2.zero;
+        ctx.caster    = this;
+        ctx.team      = team;
+        ctx.firePos   = (firePos != null) ? firePos : transform;
+        ctx.target    = target;
+        ctx.targetPos = (target != null) ? (Vector2)target.position : Vector2.zero;
 
         bool ok = data.Execute(ctx);
         if (ok)
@@ -57,6 +73,18 @@ public class SkillCaster : MonoBehaviour
     public void SpawnArrow(Vector2 start, Vector2 target,
         float speedMul = 1f, float scaleMul = 1f, int damageAdd = 0)
     {
+        // W 버프 활성 시 병합
+        if (wBuffActive && Time.time <= wBuffEndTime)
+        {
+            speedMul *= wSpeedMulCache;
+            scaleMul *= wScaleMulCache;
+            damageAdd += wDamageAddCache;
+        }
+        else
+        {
+            wBuffActive = false;
+        }
+        
         if (arrowPrefab == null) return;
 
         GameObject go = Instantiate(arrowPrefab, start, Quaternion.identity);
@@ -71,6 +99,16 @@ public class SkillCaster : MonoBehaviour
             if (damageAdd != 0) ar.SetDamageAdd(damageAdd);
             ar.Launch(start, target);
         }
+    }
+    
+    // W 버프 적용(지속시간/배수/보정치)
+    public void ApplyWBuff(float duration, float speedMul, float scaleMul, int damageAdd)
+    {
+        wBuffActive      = true;
+        wBuffEndTime     = Time.time + duration;
+        wSpeedMulCache   = speedMul;
+        wScaleMulCache   = scaleMul;
+        wDamageAddCache  = damageAdd;
     }
 
     // ---- 보조 메서드들 (전부 일반 switch) ----

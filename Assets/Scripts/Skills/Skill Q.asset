@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ec274e59fb34f641ac3aec4a7bb0508, type: 3}
-  m_Name: New Skill Q
+  m_Name: Skill Q
   m_EditorClassIdentifier: 
   skillName: Skill
   cooldown: 4

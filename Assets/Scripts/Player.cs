@@ -83,8 +83,7 @@ public class Player : MonoBehaviour
         Debug.Log("OnSkillE");
         
         if (caster == null) return;
-        Transform target = FindNearestEnemy(); // 임시 타깃 선정
-        caster.TryCast(SkillSlot.E, target);
+        caster.TryCast(SkillSlot.E);
     }
     
     void OnSkillR()
