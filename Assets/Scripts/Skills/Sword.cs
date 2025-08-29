@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    [SerializeField] LayerMask damageMask = ~0; // 필요 시 레이어 제한
-    
-    [Header("Effects")]
-    [SerializeField] GameObject vfxFalled;  
-    [SerializeField] GameObject vfxSpark;  
-    [SerializeField] float vfxLifetime  = 5.0f;
+    [SerializeField] LayerMask damageMask = ~0;
+
+    [Header("Effects")] [SerializeField] GameObject vfxFalled;
+    [SerializeField] GameObject vfxSpark;
+    [SerializeField] float vfxLifetime = 5.0f;
     private bool vfxPlayed;
     Rigidbody2D rb;
-    Collider2D  col;
+    Collider2D col;
 
     Team ownerTeam;
-    int   directHitDamage;
-    int   tickDamage;
+    int directHitDamage;
+    int tickDamage;
     float tickInterval;
     float duration;
     float tickRadius;
@@ -26,34 +25,31 @@ public class Sword : MonoBehaviour
 
     void Awake()
     {
-        rb  = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
-        // 프리팹 권장값:
-        // rb.bodyType = Dynamic, rb.gravityScale = 6~10, col.isTrigger = true
     }
 
-    public void Init(Team ownerTeam, int directHitDamage, int tickDamage, float tickInterval, float duration, float tickRadius)
+    public void Init(Team ownerTeam, int directHitDamage, int tickDamage, float tickInterval, float duration,
+        float tickRadius)
     {
-        this.ownerTeam       = ownerTeam;
+        this.ownerTeam = ownerTeam;
         this.directHitDamage = directHitDamage;
-        this.tickDamage      = tickDamage;
-        this.tickInterval    = tickInterval;
-        this.duration        = duration;
-        this.tickRadius      = tickRadius;
+        this.tickDamage = tickDamage;
+        this.tickInterval = tickInterval;
+        this.duration = duration;
+        this.tickRadius = tickRadius;
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
         if (landed) return;
 
-        // 1) 땅에 꽂히기
         if (col.collider.CompareTag("Ground"))
         {
             Land();
             return;
         }
 
-        // 2) 낙하 중 직격 데미지(한 번만)
         if (!directHitApplied && TryGetLivingHealth(col.collider, out var hp) && hp.Team != ownerTeam)
         {
             ApplyDamage(hp, directHitDamage, "SwordRain_Direct");
@@ -64,26 +60,24 @@ public class Sword : MonoBehaviour
     void Land()
     {
         PlayVFXLocal(vfxFalled, new Vector3(0, -0.5f, 0f));
-        // PlayVFX(vfxFalled);
 
         landed = true;
         if (rb)
         {
             rb.velocity = Vector2.zero;
             rb.angularVelocity = 0f;
-            rb.bodyType = RigidbodyType2D.Static; // 자리에 고정
+            rb.bodyType = RigidbodyType2D.Static;
         }
-        if (col) col.enabled = false; // 더 이상 트리거 불필요
 
-        // 착지 즉시 1틱 + 이후 주기 틱
+        if (col) col.enabled = false;
+
         StartCoroutine(TickRoutine());
     }
-    
+
     IEnumerator TickRoutine()
     {
         float endAt = Time.time + duration;
 
-        // 착지 즉시 틱 1회
         DoTick();
 
         while (Time.time + 0.001f < endAt)
@@ -97,10 +91,8 @@ public class Sword : MonoBehaviour
 
     void DoTick()
     {
-        // PlayVFX(vfxSpark);
         PlayVFXLocal(vfxFalled, new Vector3(0, -0.2f, 0f));
 
-        // 주변 피해
         var hits = Physics2D.OverlapCircleAll(transform.position, tickRadius, damageMask);
         for (int i = 0; i < hits.Length; i++)
         {
@@ -116,7 +108,7 @@ public class Sword : MonoBehaviour
     {
         hp = c.GetComponent<Health>();
         if (hp == null) return false;
-        if (hp.IsDead)  return false;
+        if (hp.IsDead) return false;
         return true;
     }
 
@@ -133,13 +125,13 @@ public class Sword : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, tickRadius);
     }
 #endif
-    
+
     // 이펙트
     void PlayVFX(GameObject prefab)
     {
         PlayVFX(prefab, Vector3.zero);
     }
-    
+
     void PlayVFX(GameObject prefab, Vector3 worldOffset)
     {
         if (vfxPlayed || !prefab) return;
@@ -148,8 +140,8 @@ public class Sword : MonoBehaviour
         if (vfxLifetime > 0f) Destroy(go, vfxLifetime);
         vfxPlayed = true;
     }
-    
-    void PlayVFXLocal(GameObject prefab, Vector3 localOffset) 
+
+    void PlayVFXLocal(GameObject prefab, Vector3 localOffset)
     {
         PlayVFX(prefab, transform.TransformPoint(localOffset) - transform.position);
     }

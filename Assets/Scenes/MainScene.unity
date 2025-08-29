@@ -1355,7 +1355,7 @@ PrefabInstance:
       objectReference: {fileID: 70444250}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: includeEInRandom
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: includeQInRandom
@@ -1363,7 +1363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: includeRInRandom
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: includeWInRandom
@@ -1395,7 +1395,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 289842c0ce8b3a5409050d76a02bfc1a, type: 2}
     - target: {fileID: 6666057573182015370, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: maxHP
-      value: 200
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7014282471995391713, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: m_IsTrigger
@@ -2917,7 +2917,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 289842c0ce8b3a5409050d76a02bfc1a, type: 2}
     - target: {fileID: 6666057573182015370, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: maxHP
-      value: 200
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7014282471995391713, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: m_IsTrigger

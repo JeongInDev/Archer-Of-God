@@ -18,15 +18,14 @@ public class Player : MonoBehaviour
 
     // 발사 관련
     [Header("Shooting")] [SerializeField] private float enemyAimOffsetX = 0.5f;
-    
-    [Header("Effects")]
-    [SerializeField] GameObject vfxSkillQ;  
-    [SerializeField] GameObject vfxSkillW;  
-    [SerializeField] GameObject vfxSkillE;  
-    [SerializeField] GameObject vfxSkillR;  
-    [SerializeField] float vfxLifetime  = 5.0f;
+
+    [Header("Effects")] [SerializeField] GameObject vfxSkillQ;
+    [SerializeField] GameObject vfxSkillW;
+    [SerializeField] GameObject vfxSkillE;
+    [SerializeField] GameObject vfxSkillR;
+    [SerializeField] float vfxLifetime = 5.0f;
     private bool vfxPlayed;
-    
+
     // Skill
     private bool isCasting;
     private bool qCastReady;
@@ -118,7 +117,7 @@ public class Player : MonoBehaviour
         }
 
         Debug.Log("OnSkillW");
-        
+
         PlayVFXLocal(vfxSkillW, new Vector3());
 
         if (caster == null) return;
@@ -158,7 +157,7 @@ public class Player : MonoBehaviour
         Debug.Log("OnSkillR");
 
         PlayVFXLocal(vfxSkillR, new Vector3());
-        
+
         // 시선 오른쪽
         var s = baseScale;
         s.x *= -1f;
@@ -276,13 +275,13 @@ public class Player : MonoBehaviour
         var cols = GetComponentsInChildren<Collider2D>(true);
         for (int i = 0; i < cols.Length; i++) cols[i].enabled = false;
     }
-    
+
     // 이펙트
     void PlayVFX(GameObject prefab)
     {
         PlayVFX(prefab, Vector3.zero);
     }
-    
+
     void PlayVFX(GameObject prefab, Vector3 worldOffset)
     {
         if (vfxPlayed || !prefab) return;
@@ -291,8 +290,8 @@ public class Player : MonoBehaviour
         if (vfxLifetime > 0f) Destroy(go, vfxLifetime);
         vfxPlayed = true;
     }
-    
-    void PlayVFXLocal(GameObject prefab, Vector3 localOffset) 
+
+    void PlayVFXLocal(GameObject prefab, Vector3 localOffset)
     {
         PlayVFX(prefab, transform.TransformPoint(localOffset) - transform.position);
     }

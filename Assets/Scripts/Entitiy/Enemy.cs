@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     // 이동
     [Header("Movement")] [SerializeField] float moveSpeed = 3f;
     [SerializeField] float arriveEpsilon = 0.3f; // 도착 판정 오차
-    [SerializeField] Transform leftBound;  // 플랫폼 왼쪽 끝
+    [SerializeField] Transform leftBound; // 플랫폼 왼쪽 끝
     [SerializeField] Transform rightBound; // 플랫폼 오른쪽 끝
 
     // 정지 및 공격
@@ -21,9 +21,9 @@ public class Enemy : MonoBehaviour
     float skillIntervalSeconds = 4f; // 4초마다 시도
 
     [SerializeField] bool includeQInRandom = true; // Q도 후보에 포함할지
-    [SerializeField] bool includeWInRandom = true; // Q도 후보에 포함할지
-    [SerializeField] bool includeEInRandom = true; // Q도 후보에 포함할지
-    [SerializeField] bool includeRInRandom = true; // Q도 후보에 포함할지
+    [SerializeField] bool includeWInRandom = true; // W도 후보에 포함할지
+    [SerializeField] bool includeEInRandom = true; // E도 후보에 포함할지
+    [SerializeField] bool includeRInRandom = true; // R도 후보에 포함할지
 
     [Header("Shooting")] [SerializeField] private float playerAimOffsetX = -0.5f;
 
@@ -45,13 +45,13 @@ public class Enemy : MonoBehaviour
 
     private float minX, maxX;
     private bool hasBounds;
-    private float targetX; 
-    private float stopEndTime; 
-    private float nextSkillTime; 
+    private float targetX;
+    private float stopEndTime;
+    private float nextSkillTime;
     private bool isDead;
 
     // 스킬 상태
-    bool isCasting = false; 
+    bool isCasting = false;
     SkillSlot queuedSkill;
 
     void Awake()
@@ -140,7 +140,7 @@ public class Enemy : MonoBehaviour
         // 정지 중에만 스킬 시도
         if (Time.time >= nextSkillTime)
         {
-            TryCastRandomSkillOnce(); 
+            TryCastRandomSkillOnce();
             nextSkillTime = Time.time + skillIntervalSeconds;
         }
 

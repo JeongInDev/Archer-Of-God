@@ -10,7 +10,7 @@ public struct DamageInfo
     public Vector2 hitPoint;
     public Object instigator;
 
-    public DamageInfo(int amount, Team team, string id, Vector2 point, Object instigator=null)
+    public DamageInfo(int amount, Team team, string id, Vector2 point, Object instigator = null)
     {
         this.amount = amount;
         this.sourceTeam = team;

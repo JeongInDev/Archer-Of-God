@@ -2,34 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SkillSlot { Q, W, E, R }
+public enum SkillSlot
+{
+    Q,
+    W,
+    E,
+    R
+}
 
 public class SkillCaster : MonoBehaviour
 {
-    [Header("Common")]
-    public Team team = Team.Player;
-    public Transform firePos;         // 발사 위치(없으면 본인 Transform)
-    public GameObject arrowPrefab;    // 화살 프리팹
+    [Header("Common")] public Team team = Team.Player;
+    public Transform firePos; // 발사 위치
+    public GameObject arrowPrefab; // 화살 프리팹
 
-    [Header("Slots")]
-    public SkillData skillQ;
+    [Header("Slots")] public SkillData skillQ;
     public SkillData skillW;
     public SkillData skillE;
     public SkillData skillR;
 
-    // 쿨다운(remaining time)
+    // 쿨타임
     private float cooldownQ;
     private float cooldownW;
     private float cooldownE;
     private float cooldownR;
-    
-    // ── W 버프 상태 ──
+
+    // W 버프 상태
     private bool wBuffActive = false;
     private float wBuffEndTime = 0;
     private float wSpeedMulCache = 1f;
     private float wScaleMulCache = 1f;
-    private int   wDamageAddCache = 0;
-    
+    private int wDamageAddCache = 0;
+
     void Update()
     {
         float dt = Time.deltaTime;
@@ -37,8 +41,8 @@ public class SkillCaster : MonoBehaviour
         if (cooldownW > 0f) cooldownW -= dt;
         if (cooldownE > 0f) cooldownE -= dt;
         if (cooldownR > 0f) cooldownR -= dt;
-        
-        // 버프 만료 처리
+
+        // 버프 만료
         if (wBuffActive && Time.time > wBuffEndTime)
         {
             wBuffActive = false;
@@ -54,10 +58,10 @@ public class SkillCaster : MonoBehaviour
             return false;
 
         SkillContext ctx = new SkillContext();
-        ctx.caster    = this;
-        ctx.team      = team;
-        ctx.firePos   = (firePos != null) ? firePos : transform;
-        ctx.target    = target;
+        ctx.caster = this;
+        ctx.team = team;
+        ctx.firePos = (firePos != null) ? firePos : transform;
+        ctx.target = target;
         ctx.targetPos = (target != null) ? (Vector2)target.position : Vector2.zero;
 
         bool ok = data.Execute(ctx);
@@ -66,14 +70,13 @@ public class SkillCaster : MonoBehaviour
             SetCooldown(slot, data.cooldown);
             return true;
         }
+
         return false;
     }
-    
-    // 스킬 구현에서 화살 쏠 때 호출하는 헬퍼
+
     public void SpawnArrow(Vector2 start, Vector2 target,
         float speedMul = 1f, float scaleMul = 1f, int damageAdd = 0)
     {
-        // W 버프 활성 시 병합
         if (wBuffActive && Time.time <= wBuffEndTime)
         {
             speedMul *= wSpeedMulCache;
@@ -84,7 +87,7 @@ public class SkillCaster : MonoBehaviour
         {
             wBuffActive = false;
         }
-        
+
         if (arrowPrefab == null) return;
 
         GameObject go = Instantiate(arrowPrefab, start, Quaternion.identity);
@@ -101,15 +104,15 @@ public class SkillCaster : MonoBehaviour
             ar.Launch(start, target);
         }
     }
-    
-    // W 버프 적용(지속시간/배수/보정치)
+
+    // W 버프 적용
     public void ApplyWBuff(float duration, float speedMul, float scaleMul, int damageAdd)
     {
-        wBuffActive      = true;
-        wBuffEndTime     = Time.time + duration;
-        wSpeedMulCache   = speedMul;
-        wScaleMulCache   = scaleMul;
-        wDamageAddCache  = damageAdd;
+        wBuffActive = true;
+        wBuffEndTime = Time.time + duration;
+        wSpeedMulCache = speedMul;
+        wScaleMulCache = scaleMul;
+        wDamageAddCache = damageAdd;
     }
 
     public bool CanCast(SkillSlot slot)
@@ -118,8 +121,7 @@ public class SkillCaster : MonoBehaviour
         if (data == null) return false;
         return GetRemainingCooldown(slot) <= 0f;
     }
-    
-    // ---- 보조 메서드들 (전부 일반 switch) ----
+
     SkillData GetData(SkillSlot slot)
     {
         switch (slot)
@@ -143,15 +145,23 @@ public class SkillCaster : MonoBehaviour
             default: return 0f;
         }
     }
-    
+
     void SetCooldown(SkillSlot slot, float value)
     {
         switch (slot)
         {
-            case SkillSlot.Q: cooldownQ = value; break;
-            case SkillSlot.W: cooldownW = value; break;
-            case SkillSlot.E: cooldownE = value; break;
-            case SkillSlot.R: cooldownR = value; break;
+            case SkillSlot.Q:
+                cooldownQ = value;
+                break;
+            case SkillSlot.W:
+                cooldownW = value;
+                break;
+            case SkillSlot.E:
+                cooldownE = value;
+                break;
+            case SkillSlot.R:
+                cooldownR = value;
+                break;
         }
     }
 }

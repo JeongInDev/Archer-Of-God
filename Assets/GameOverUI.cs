@@ -6,10 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameOverUI : MonoBehaviour
 {
-    [Header("UI Refs")]
-    [SerializeField] GameObject root;
+    [Header("UI Refs")] [SerializeField] GameObject root;
     [SerializeField] Button restartButton;
-    
+
     bool shown;
     Health playerHealth;
 
@@ -55,7 +54,6 @@ public class GameOverUI : MonoBehaviour
 
     void Restart()
     {
-        // 현재 씬 리로드
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.buildIndex);
     }

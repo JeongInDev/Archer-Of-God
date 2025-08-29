@@ -9,11 +9,10 @@ public class BigShield : MonoBehaviour
     private SpriteRenderer[] spritesToFlip;
     Health health;
 
-    [Header("Effects")]
-    [SerializeField] GameObject vfxOnGround;  
-    [SerializeField] float vfxLifetime  = 1.0f;
+    [Header("Effects")] [SerializeField] GameObject vfxOnGround;
+    [SerializeField] float vfxLifetime = 1.0f;
     private bool vfxPlayed;
-    
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -68,13 +67,13 @@ public class BigShield : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    
+
     // ÀÌÆåÆ®
     void PlayVFX(GameObject prefab)
     {
         PlayVFX(prefab, Vector3.zero);
     }
-    
+
     void PlayVFX(GameObject prefab, Vector3 worldOffset)
     {
         if (vfxPlayed || !prefab) return;
@@ -83,8 +82,8 @@ public class BigShield : MonoBehaviour
         if (vfxLifetime > 0f) Destroy(go, vfxLifetime);
         vfxPlayed = true;
     }
-    
-    void PlayVFXLocal(GameObject prefab, Vector3 localOffset) 
+
+    void PlayVFXLocal(GameObject prefab, Vector3 localOffset)
     {
         PlayVFX(prefab, transform.TransformPoint(localOffset) - transform.position);
     }

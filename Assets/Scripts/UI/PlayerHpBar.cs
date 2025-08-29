@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class PlayerHpBar : MonoBehaviour
 {
-    [SerializeField] Health target;   // 플레이어 Health
-    [SerializeField] Image  fill;     // 초록색 "Health" 이미지
-    [SerializeField] bool   smooth = true;
-    [SerializeField] float  smoothSpeed = 8f;
-    
+    [SerializeField] Health target;
+    [SerializeField] Image fill;
+    [SerializeField] bool smooth = true;
+    [SerializeField] float smoothSpeed = 8f;
+
     float currentRatio = 1f;
 
     void Awake()
@@ -19,6 +19,7 @@ public class PlayerHpBar : MonoBehaviour
             var p = GameObject.FindGameObjectWithTag("Player");
             if (p) target = p.GetComponent<Health>();
         }
+
         if (fill == null)
         {
             var tf = transform.Find("Health");
