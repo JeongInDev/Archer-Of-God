@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
             Debug.Log("Q - 스킬 사용 불가");
             return;
         }
-        Debug.Log("Q - 스킬 사용");
+        Debug.Log("OnSkillQ");
         // qTargetSnapshot = FindNearestEnemy();
         
         // 시선 오른쪽
@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
         
         // 애니메이션 트리거
         anim.SetTrigger("SkillQ");
-        qCastReady = true; // 이벤트에서만 실제 발사하도록 '장전'
+        qCastReady = true;
         isCasting = true;
     }
     
@@ -106,18 +106,19 @@ public class Player : MonoBehaviour
     void OnSkillE()
     {
         Debug.Log("OnSkillE");
-        
-        if (caster == null) return;
-        caster.TryCast(SkillSlot.E);
+     
+        anim.SetTrigger("SkillE");
+        qCastReady = true;
+        isCasting = true;
     }
     
     void OnSkillR()
     {
         Debug.Log("OnSkillR");
         
-        if (caster == null) return;
-        Transform target = FindNearestEnemy(); // 임시 타깃 선정
-        caster.TryCast(SkillSlot.R, target);
+        anim.SetTrigger("SkillR");
+        qCastReady = true;
+        isCasting = true;
     }
 
     Transform FindNearestEnemy()
@@ -164,10 +165,26 @@ public class Player : MonoBehaviour
         caster.TryCast(SkillSlot.Q, nearestEnemyTransform);
         qCastReady = false;
     }
-
-    void AE_EndSkillQ()
+    
+    void AE_SkillE()
     {
-        Debug.Log("스킬 Q 캐스팅 끄으으으으으읕");
+        if(!qCastReady) return;
+        
+        caster.TryCast(SkillSlot.E, transform);
+        qCastReady = false;
+    }    
+    
+    void AE_SkillR()
+    {
+        if(!qCastReady) return;
+        
+        caster.TryCast(SkillSlot.R, transform);
+        qCastReady = false;
+    }
+
+    void AE_EndSkill()
+    {
+        Debug.Log("플레이어 스킬 끄으으으으으읕");
 
         moveInput = Vector2.zero;
         isCasting = false;

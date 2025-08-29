@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8384482079447402474}
   - component: {fileID: 6890187214084572380}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Back arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1300612373945972202}
   - component: {fileID: 3858421247116867694}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,9 +183,9 @@ GameObject:
   - component: {fileID: 3555505556070004902}
   - component: {fileID: 3845433434914450525}
   - component: {fileID: 5452911147439542231}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -333,9 +333,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveInput: {x: 0, y: 0}
   moveSpeed: 3
-  anim: {fileID: 849803419466477850}
-  arrowPrefab: {fileID: 0}
-  firePos: {fileID: 0}
   enemyAimOffsetX: 0.5
 --- !u!1 &1425326062548074746
 GameObject:
@@ -346,7 +343,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3640545978782216927}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: firePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3435436974447732855}
   - component: {fileID: 8241649161571365839}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Back leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -462,7 +459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6704022013760585189}
   - component: {fileID: 2796997779566131307}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Front leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 360824893370220193}
   - component: {fileID: 6472981804119825544}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Front arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -631,7 +628,7 @@ GameObject:
   m_Component:
   - component: {fileID: 779439289152810885}
   - component: {fileID: 4031091257314626925}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -716,7 +713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1459681367387037476}
   - component: {fileID: 6251805189869755862}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -800,7 +797,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7791142817049297215}
   - component: {fileID: 5258006265282803931}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

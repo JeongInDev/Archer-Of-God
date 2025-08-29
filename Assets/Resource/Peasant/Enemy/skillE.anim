@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: skillQ
+  m_Name: skillE
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -3985,14 +3985,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.46666667
-    functionName: AE_SkillQ
+    functionName: AE_Enemy_SkillE
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.7
-    functionName: AE_EndSkill
+    functionName: AE_Enemy_EndSkill
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

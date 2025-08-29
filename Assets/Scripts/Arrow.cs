@@ -16,14 +16,13 @@ public class Arrow : MonoBehaviour
     
     [Header("ArrowData")]
     [SerializeField] private float maxHeight   = 2f;            // 최고점
-    [SerializeField] private float arrowSpeed = 8f;             // ★ 화살 속도(유닛/초) ? 일정하게 유지
-    [SerializeField] private float minDuration = 1f;            // 근거리 감성(최소 비행시간)
-    [SerializeField] private float maxDuration = 3f;            // 원거리 감성(최대 비행시간)
-    [SerializeField] private float fadeTime    = 2f;            // Ground 맞았을 때 페이드
+    [SerializeField] private float arrowSpeed = 8f;             // 화살 속도
+    [SerializeField] private float minDuration = 1f;            // 최소 비행시간
+    [SerializeField] private float maxDuration = 3f;            // 최대 비행시간
+    [SerializeField] private float fadeTime    = 2f;            // 땅맞았을때 맞았을 때 페이드 시간
     [SerializeField] private int damage = 10;                   // 화살 기본 데미지
-    [SerializeField] private Team ownerTeam = Team.Player;      // 발사자 팀(아군 오발 방지용 선택)
+    [SerializeField] private Team ownerTeam = Team.Player;      // 팀
     
-    // ★ 새로 추가: 충돌이 없으면 n초 후 자동 삭제
     [SerializeField] private float autoDestroyAfter = 5f;
     private Coroutine autoKillCo;
     
@@ -45,19 +44,15 @@ public class Arrow : MonoBehaviour
     
     public void Launch(Vector2 s, Vector2 t)
     {
-        start = s; target = t;
-        
-        // ★ 거리/속도 → 비행시간 계산(원하는 감성 범위로 클램프)
+        start = s; 
+        target = t;
         float dist = Vector2.Distance(start, target);
         float raw  = dist / Mathf.Max(0.001f, arrowSpeed);
         duration   = Mathf.Clamp(raw, minDuration, maxDuration);
         
-        
         StopAllCoroutines();
-        // ★ 자동 삭제 타이머 시작 (충돌 발생 시 정지)
         if (autoKillCo != null) StopCoroutine(autoKillCo);
         autoKillCo = StartCoroutine(AutoDestroyAfter(autoDestroyAfter));
-        
         StartCoroutine(Fly());
     }
     
@@ -70,7 +65,7 @@ public class Arrow : MonoBehaviour
         while (t < duration)
         {
             t += Time.deltaTime;
-            float u = Mathf.Clamp01(t / duration);                 // 0..1
+            float u = Mathf.Clamp01(t / duration);  // 0..1
             float h = Mathf.Lerp(0f, maxHeight, heightCurve.Evaluate(u));
             Vector2 pos = Vector2.Lerp(start, target, u) + Vector2.up * h;
 
@@ -83,25 +78,19 @@ public class Arrow : MonoBehaviour
 
             yield return null;
         }
-
-        // flying = false;                 // 충돌이 없으면 목표 지점 도달 후 파괴
-        // Destroy(gameObject);
     }
     
     public void MulTravelSpeed(float mul) { arrowSpeed *= mul; }
-    public void SetDamageAdd(int add)     { damage += add; }   // damage 필드가 없다면 int damage = 10; 같은 기본값 추가
-    public void SetOwnerTeam(Team t)      { ownerTeam = t; } // 이 메서드도 하나 추가 권장
+    public void SetDamageAdd(int add)     { damage += add; }
+    public void SetOwnerTeam(Team t)      { ownerTeam = t; }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"Arrow hit {other.name} tag:{other.tag}");
+        // Debug.Log($"Arrow hit {other.name} tag:{other.tag}");
 
-        // 자동 삭제 타이머 정지
         if (autoKillCo != null) { StopCoroutine(autoKillCo); autoKillCo = null; }
-
         if (!flying) return;
 
-        // 1) 땅(바리케이드 포함) 처리
         if (other.CompareTag("Ground"))
         {
             flying = false;
@@ -111,72 +100,32 @@ public class Arrow : MonoBehaviour
             return;
         }
 
-        // 2) 타격 가능한 대상 찾기 (IDamageable 우선, 없으면 Health)
         IDamageable dmg = null;
         Health hp = null;
 
         if (!other.TryGetComponent<IDamageable>(out dmg))
             other.TryGetComponent<Health>(out hp);
-
-        // 타격 대상이 없으면 무시
         if (dmg == null && hp == null) return;
 
-        // 3) 팀 판정: 소유팀과 같으면 기본적으로 무시 (friendlyFire=false)
+        // 팀 판정 같은 팀이면 무시
         Team targetTeam = (dmg != null) ? dmg.Team : hp.Team;
-        if (targetTeam == ownerTeam) return;
+        if (targetTeam == ownerTeam) 
+            return;
 
-        // 4) 데미지 적용
+        // 데미지
         var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
+        if (dmg != null)        
+            dmg.ApplyDamage(info);
+        else 
+            hp.ApplyDamage(info);
 
-        if (dmg != null)        dmg.ApplyDamage(info);
-        else /* hp != null */   hp.ApplyDamage(info);
-
-        // 5) 명중 시 화살 파괴
         Destroy(gameObject);
-        
-        // // ★ 충돌이 발생했으니 자동 삭제 타이머 중지
-        // if (autoKillCo != null) { StopCoroutine(autoKillCo); autoKillCo = null; }
-        //
-        // if (!flying) return;
-        //
-        // if (other.CompareTag("Enemy"))
-        // {
-        //     // 1) IDamageable 우선
-        //     IDamageable dmg;
-        //     if (other.TryGetComponent<IDamageable>(out dmg))
-        //     {
-        //         var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
-        //         dmg.ApplyDamage(info);
-        //     }
-        //     else
-        //     {
-        //         // 2) IDamageable이 없다면 Health 직접 찾기(폴백)
-        //         Health hp;
-        //         if (other.TryGetComponent<Health>(out hp))
-        //         {
-        //             var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
-        //             hp.ApplyDamage(info);
-        //         }
-        //     }
-        //
-        //     Destroy(gameObject); // 적 맞으면 화살 파괴(연출은 취향대로)
-        //     return;
-        // }
-        // else if (other.CompareTag("Ground"))
-        // {
-        //     flying = false;
-        //     StopAllCoroutines();        // 그 자리에서 멈춤
-        //     if (_collider2D) _collider2D.enabled = false;
-        //     StartCoroutine(FadeAndDie());
-        // }
     }
     
     IEnumerator AutoDestroyAfter(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        // 5초 동안 아무 충돌도 없었다면 자동 삭제
         if (this) Destroy(gameObject);
-
         Debug.Log("화살 자동 삭제!");
     }
     

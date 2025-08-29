@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95a6130b3635d646b08fb5ecffad52f, type: 3}
+  m_Name: SkillE
+  m_EditorClassIdentifier: 
+  skillName: Skill
+  cooldown: 15
+  shieldPrefab: {fileID: 2525805090680515441, guid: 8c06eef2de83c0d478b37ca860c882a7, type: 3}
+  dropHeight: 6
+  forwardOffset: 0.2
+  maxHp: 100

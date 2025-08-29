@@ -672,7 +672,7 @@ TilemapCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -806,8 +806,8 @@ Transform:
   m_GameObject: {fileID: 361114848}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.23, y: -0.59, z: -0.25015858}
-  m_LocalScale: {x: 4, y: 5, z: 1}
+  m_LocalPosition: {x: -0.84, y: -0.59, z: -0.25015858}
+  m_LocalScale: {x: 2, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1378939625}
@@ -1621,7 +1621,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 1051298090223956220, guid: 41015ba4e825bc84db7bf9d55e60e362, type: 3}
   skillQ: {fileID: 11400000, guid: 2a7d97dd1a3713d4a93111dd5f7b2b21, type: 2}
   skillW: {fileID: 11400000, guid: 289842c0ce8b3a5409050d76a02bfc1a, type: 2}
-  skillE: {fileID: 0}
+  skillE: {fileID: 11400000, guid: cb558214b0c0da2469c196136cd93734, type: 2}
   skillR: {fileID: 0}
 --- !u!1 &1304992710
 GameObject:
@@ -2499,6 +2499,18 @@ PrefabInstance:
       propertyPath: rightBound
       value: 
       objectReference: {fileID: 70444250}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeQInRandom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeRInRandom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeWInRandom
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2769906568521105628, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -2511,6 +2523,10 @@ PrefabInstance:
       propertyPath: team
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6110740946365328749, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: skillE
+      value: 
+      objectReference: {fileID: 11400000, guid: cb558214b0c0da2469c196136cd93734, type: 2}
     - target: {fileID: 6110740946365328749, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: skillQ
       value: 

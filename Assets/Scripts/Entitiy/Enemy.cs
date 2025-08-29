@@ -230,6 +230,24 @@ public class Enemy : MonoBehaviour
         caster.TryCast(SkillSlot.Q, playerTransform);
     }
     
+    public void AE_Enemy_SkillE()
+    {
+        if (!caster) return;
+
+        Debug.Log("몬스터 스킬 E");
+
+        caster.TryCast(SkillSlot.E, playerTransform);
+    }
+    
+    public void AE_Enemy_SkillR()
+    {
+        if (!caster) return;
+
+        Debug.Log("몬스터 스킬 R");
+
+        caster.TryCast(SkillSlot.R, playerTransform);
+    }
+    
     // 스킬/공격 애니 끝(스킬 애니의 마지막 프레임 이벤트)
     public void AE_Enemy_EndSkill()
     {

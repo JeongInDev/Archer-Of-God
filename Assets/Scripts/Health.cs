@@ -14,6 +14,13 @@ public class Health : MonoBehaviour
     
     void Awake() => CurrentHP = maxHP;
 
+    public void SetTeam(Team t) { team = t; }
+    public void SetMaxHP(int newMax, bool refill)
+    {
+        maxHP = Mathf.Max(1, newMax);
+        CurrentHP = refill ? maxHP : Mathf.Min(CurrentHP, maxHP);
+    }
+    
     public void ApplyDamage(DamageInfo info)
     {
         if (!IsAlive) return;

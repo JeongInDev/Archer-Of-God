@@ -641,7 +641,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &7014282471995391713
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -704,13 +704,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
+  arriveEpsilon: 0.1
   leftBound: {fileID: 0}
   rightBound: {fileID: 0}
-  arriveEpsilon: 0.1
-  basicTimeMin: 1
-  basicTimeMax: 4
-  skillChance: 0.35
-  randomIncludeQ: 1
+  stopTimeMin: 1
+  stopTimeMax: 4
+  skillIntervalSeconds: 4
+  includeQInRandom: 1
+  includeWInRandom: 1
+  includeEInRandom: 1
+  includeRInRandom: 1
+  playerAimOffsetX: -0.5
 --- !u!114 &6110740946365328749
 MonoBehaviour:
   m_ObjectHideFlags: 0
