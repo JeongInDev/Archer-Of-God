@@ -1354,16 +1354,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 70444250}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
-      propertyPath: includeQInRandom
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
-      propertyPath: includeRInRandom
+      propertyPath: includeEInRandom
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
-      propertyPath: includeWInRandom
+      propertyPath: includeQInRandom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeRInRandom
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeWInRandom
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2769906568521105628, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: m_Name
@@ -1643,7 +1647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  maxHP: 1000
+  maxHP: 300
 --- !u!114 &1186799663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1662,7 +1666,7 @@ MonoBehaviour:
   skillQ: {fileID: 11400000, guid: 2a7d97dd1a3713d4a93111dd5f7b2b21, type: 2}
   skillW: {fileID: 11400000, guid: 289842c0ce8b3a5409050d76a02bfc1a, type: 2}
   skillE: {fileID: 11400000, guid: cb558214b0c0da2469c196136cd93734, type: 2}
-  skillR: {fileID: 0}
+  skillR: {fileID: 11400000, guid: 8809d13d6ffc58249bd7aef0fb8d59e1, type: 2}
 --- !u!1 &1304992710
 GameObject:
   m_ObjectHideFlags: 0
@@ -2540,16 +2544,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 70444250}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
-      propertyPath: includeQInRandom
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
-      propertyPath: includeRInRandom
+      propertyPath: includeEInRandom
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
-      propertyPath: includeWInRandom
+      propertyPath: includeQInRandom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeRInRandom
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 507083652258503049, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
+      propertyPath: includeWInRandom
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2769906568521105628, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: m_Name
@@ -2577,7 +2585,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 289842c0ce8b3a5409050d76a02bfc1a, type: 2}
     - target: {fileID: 6666057573182015370, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: maxHP
-      value: 200
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7014282471995391713, guid: 242a1ef686dc6a24a9e45a4f424525a0, type: 3}
       propertyPath: m_IsTrigger

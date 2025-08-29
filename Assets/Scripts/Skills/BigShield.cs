@@ -7,13 +7,14 @@ public class BigShield : MonoBehaviour
     Rigidbody2D rb;
     bool installed;
     private SpriteRenderer[] spritesToFlip;
+    Health health;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spritesToFlip = GetComponents<SpriteRenderer>();
-        // spritesToFlip = GetComponentsInChildren<SpriteRenderer>(true);
-
+        health = GetComponent<Health>();
+        if (health != null) health.OnDied += OnDied;
     }
 
     public void Init(Team team, int hp)
@@ -22,9 +23,9 @@ public class BigShield : MonoBehaviour
         if (h != null)
         {
             h.SetTeam(team);
-            h.SetMaxHP(hp, true); // 풀로 채워 배치
+            h.SetMaxHP(hp, true);
         }
-        
+
         // 적팀이 쓴 스킬이라면 반대로 뒤집기
         if (team == Team.Enemy)
         {
@@ -42,7 +43,6 @@ public class BigShield : MonoBehaviour
 
         if (col.collider.CompareTag("Ground"))
         {
-            
             installed = true;
             if (rb)
             {
@@ -51,5 +51,15 @@ public class BigShield : MonoBehaviour
                 rb.bodyType = RigidbodyType2D.Static;
             }
         }
+    }
+
+    void OnDestroy()
+    {
+        if (health != null) health.OnDied -= OnDied;
+    }
+
+    void OnDied(Health _)
+    {
+        Destroy(gameObject);
     }
 }

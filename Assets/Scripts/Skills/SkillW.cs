@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName="Skills/W - HeavyArrowBuff")]
+[CreateAssetMenu(menuName = "Skills/W - HeavyArrowBuff")]
 public class SkillW : SkillData
 {
-    public float duration = 5f;
-    public float speedMul = 0.6f;  // 느리게
-    public float scaleMul = 1.6f;  // 크게
-    public int   damageAdd = 5;    // 조금 더 셈
+    public float duration = 5f;             // 버프 지속 시간
+    public float speedMul = 0.6f;           // 얼마나 더 느려질지
+    public float scaleMul = 1.6f;   // 얼마나 더 커질지
+    public int damageAdd = 5;   // 얼마나 더 세질지
 
     public override bool Execute(in SkillContext ctx)
     {

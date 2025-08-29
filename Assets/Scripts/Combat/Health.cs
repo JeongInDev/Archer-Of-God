@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Health : MonoBehaviour
 {
     [SerializeField] private Team team = Team.Enemy;
     [SerializeField] private int maxHP = 100;
     public int CurrentHP { get; private set; }
+    public event Action<Health> OnDied;
+    bool dead;  
     
     public Team Team => team;
     public bool IsAlive => CurrentHP > 0;
     public int MaxHP => maxHP;
+    public bool IsDead => dead;
     
     void Awake() => CurrentHP = maxHP;
 
@@ -35,6 +39,9 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        gameObject.SetActive(false); // 일단 비활성 처리(연출은 나중에)
+        if (dead) return;                // ★ 중복 방지
+        dead = true;
+
+        OnDied?.Invoke(this);             // ★ 먼저 알리고
     }
 }

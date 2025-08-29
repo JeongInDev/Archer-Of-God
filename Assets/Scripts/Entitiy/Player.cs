@@ -14,45 +14,52 @@ public class Player : MonoBehaviour
     private Vector3 baseScale;
     private Animator anim;
     private SkillCaster caster;
-    
+    private Health health;
+
     // 발사 관련
-    [Header("Shooting")]
-    [SerializeField] private float enemyAimOffsetX = 0.5f;
-    
+    [Header("Shooting")] [SerializeField] private float enemyAimOffsetX = 0.5f;
+
     // Skill
     private bool isCasting;
     private bool qCastReady;
-    
+
+    private bool isDead;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         baseScale = transform.localScale;
         anim = GetComponent<Animator>();
         caster = GetComponent<SkillCaster>();
+        health = GetComponent<Health>();
+
+        if (health)
+            health.OnDied += OnPlayerDied;
     }
-    
+
     private void FixedUpdate()
     {
+        if (isDead) return;
+
         if (!isCasting)
         {
-            Vector2 nextVec= moveInput * (moveSpeed * Time.fixedDeltaTime);
+            Vector2 nextVec = moveInput * (moveSpeed * Time.fixedDeltaTime);
             rb.MovePosition(rb.position + nextVec);
         }
-        
-        // Vector2 input = isCasting ? Vector2.zero : moveInput;
-
     }
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            
+            // 치트 칸
         }
     }
 
     private void LateUpdate()
     {
+        if (isDead) return;
+
         if (!isCasting)
         {
             // 플레이어 방향 설정
@@ -60,14 +67,13 @@ public class Player : MonoBehaviour
             s.x *= (moveInput.x < 0f) ? +1f : -1f;
             transform.localScale = s;
         }
-        
-        // 이동 애니메이션 설정 
+
         anim.SetFloat("isMoving", Mathf.Abs(moveInput.x));
     }
 
     void OnMove(InputValue value)
     {
-        if(!isCasting)
+        if (!isCasting)
             moveInput = value.Get<Vector2>();
     }
 
@@ -80,61 +86,81 @@ public class Player : MonoBehaviour
             Debug.Log("Q - 스킬 사용 불가");
             return;
         }
+
         Debug.Log("OnSkillQ");
-        // qTargetSnapshot = FindNearestEnemy();
-        
+
         // 시선 오른쪽
         var s = baseScale;
         s.x *= -1f;
         transform.localScale = s;
-        
-        // 애니메이션 트리거
+
         anim.SetTrigger("SkillQ");
         qCastReady = true;
         isCasting = true;
     }
-    
+
     void OnSkillW()
     {
+        if (!caster.CanCast(SkillSlot.W))
+        {
+            Debug.Log("W - 스킬 사용 불가");
+            return;
+        }
+
         Debug.Log("OnSkillW");
-        
+
         if (caster == null) return;
-        Transform target = FindNearestEnemy(); // 임시 타깃 선정
-        caster.TryCast(SkillSlot.W, target);
+        caster.TryCast(SkillSlot.W);
     }
-    
+
     void OnSkillE()
     {
+        if (!caster.CanCast(SkillSlot.E))
+        {
+            Debug.Log("E - 스킬 사용 불가");
+            return;
+        }
+
         Debug.Log("OnSkillE");
-     
+
         // 시선 오른쪽
         var s = baseScale;
         s.x *= -1f;
         transform.localScale = s;
-        
+
         anim.SetTrigger("SkillE");
         qCastReady = true;
         isCasting = true;
     }
-    
+
     void OnSkillR()
     {
+        if (!caster.CanCast(SkillSlot.R))
+        {
+            Debug.Log("R - 스킬 사용 불가");
+            return;
+        }
+
         Debug.Log("OnSkillR");
-        
+
         // 시선 오른쪽
         var s = baseScale;
         s.x *= -1f;
         transform.localScale = s;
-        
+
         anim.SetTrigger("SkillR");
         qCastReady = true;
         isCasting = true;
     }
 
+    /// <summary>
+    /// 가장 가까운 적 찾기
+    /// </summary>
+    /// <returns></returns>
     Transform FindNearestEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies == null || enemies.Length == 0) 
+        if (enemies == null || enemies.Length == 0)
             return null;
 
         Transform best = null;
@@ -143,25 +169,32 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < enemies.Length; i++)
         {
-            if (!enemies[i].activeInHierarchy) 
+            GameObject enemy = enemies[i];
+            if (!enemy.activeInHierarchy)
                 continue;
-            float d2 = (enemies[i].transform.position - from).sqrMagnitude;
-            if (d2 < bestSqr) { bestSqr = d2; best = enemies[i].transform; }
+
+            Health h = enemy.GetComponent<Health>();
+            if (h == null || h.IsDead)
+                continue;
+
+            float d2 = (enemy.transform.position - from).sqrMagnitude;
+            if (d2 < bestSqr)
+                bestSqr = d2;
+            best = enemy.transform;
         }
+
         return best;
     }
-    
+
     // 애니메이션 이벤트
     void AE_FireArrow()
     {
-        if (caster == null) return;                     // ← SkillCaster 필수
-        // var enemyObj = GameObject.FindWithTag("Enemy");
-        // if (enemyObj == null) return;
+        if (caster == null) return;
 
-        Transform nearestEnemyTransform = FindNearestEnemy();      // ★ 매번 갱신
+        Transform nearestEnemyTransform = FindNearestEnemy();
         if (nearestEnemyTransform == null) return;
-        
-        Vector2 start  = (caster.firePos ? (Vector2)caster.firePos.position : (Vector2)transform.position);
+
+        Vector2 start = (caster.firePos ? (Vector2)caster.firePos.position : (Vector2)transform.position);
         Vector2 target = (Vector2)nearestEnemyTransform.position + new Vector2(enemyAimOffsetX, 0f);
 
         caster.SpawnArrow(start, target);
@@ -169,26 +202,27 @@ public class Player : MonoBehaviour
 
     void AE_SkillQ()
     {
-        if(!qCastReady) return;
-        
-        Transform nearestEnemyTransform = FindNearestEnemy();      // ★ 매번 갱신
+        if (!qCastReady) return;
+
+        Transform nearestEnemyTransform = FindNearestEnemy();
         caster.TryCast(SkillSlot.Q, nearestEnemyTransform);
         qCastReady = false;
     }
-    
+
     void AE_SkillE()
     {
-        if(!qCastReady) return;
-        
+        if (!qCastReady) return;
+
         caster.TryCast(SkillSlot.E, transform);
         qCastReady = false;
-    }    
-    
+    }
+
     void AE_SkillR()
     {
-        if(!qCastReady) return;
-        
-        caster.TryCast(SkillSlot.R, transform);
+        if (!qCastReady) return;
+
+        Transform nearestEnemyTransform = FindNearestEnemy();
+        caster.TryCast(SkillSlot.R, nearestEnemyTransform);
         qCastReady = false;
     }
 
@@ -199,11 +233,31 @@ public class Player : MonoBehaviour
         moveInput = Vector2.zero;
         isCasting = false;
     }
-    
-    // 안전장치: 객체 비활성/상태 전환 시 잔여 플래그 제거
+
     void OnDisable()
     {
         isCasting = false;
         qCastReady = false;
+    }
+
+    void OnDestroy()
+    {
+        if (health) health.OnDied -= OnPlayerDied; // ★ 해제
+    }
+
+    void OnPlayerDied(Health _)
+    {
+        if (isDead) return;
+
+        isDead = true;
+        anim?.SetTrigger("isDead");
+        DisableAllColliders();
+        EnemyRegistry.TriggerVictoryAll();
+    }
+
+    void DisableAllColliders()
+    {
+        var cols = GetComponentsInChildren<Collider2D>(true);
+        for (int i = 0; i < cols.Length; i++) cols[i].enabled = false;
     }
 }
