@@ -334,9 +334,9 @@ MonoBehaviour:
   moveInput: {x: 0, y: 0}
   moveSpeed: 3
   anim: {fileID: 849803419466477850}
-  arrow: {fileID: 2499349201998213840, guid: a60b0f7467b83a44181b374196521fbb, type: 3}
-  arrowForce: 5
-  shotPos: {fileID: 3640545978782216927}
+  arrowPrefab: {fileID: 0}
+  firePos: {fileID: 0}
+  enemyAimOffsetX: 0.5
 --- !u!1 &1425326062548074746
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3640545978782216927}
   m_Layer: 0
-  m_Name: shotPos
+  m_Name: firePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -13,6 +13,42 @@
                     "processors": "NormalizeVector2",
                     "interactions": "Press",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "SkillQ",
+                    "type": "Button",
+                    "id": "e8ed411c-88be-40f5-a361-962009dfedbf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillW",
+                    "type": "Button",
+                    "id": "5ac40348-32dc-419a-9bac-20fa4c813334",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillE",
+                    "type": "Button",
+                    "id": "6e0d1f62-7260-492d-a27c-80df9d674501",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillR",
+                    "type": "Button",
+                    "id": "cae340c7-0bc8-4571-ba12-eb3dbb88bcd9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -48,6 +84,50 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "25d12e94-8e59-4d2e-b239-66d30cd1e10c",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SkillQ",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a9f5212d-206f-46ef-b6a4-186dced7d921",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SkillW",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a2265c0-7048-4ea2-9010-8092a9d9508b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SkillE",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3000db6-041e-47aa-b7cf-1b1067d4dbbd",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SkillR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
