@@ -23,6 +23,12 @@ public class Arrow : MonoBehaviour
     [SerializeField] private int damage = 10;                   // 화살 기본 데미지
     [SerializeField] private Team ownerTeam = Team.Player;      // 팀
     
+    [Header("Effects")]
+    [SerializeField] GameObject vfxOnCharacter;   // 적/플레이어 등 캐릭터에 맞았을 때
+    [SerializeField] GameObject vfxOnGround;  // Ground 등에 박혔을 때
+    [SerializeField] float vfxLifetime  = 1.0f; // VFX 프리팹이 자기파괴 안할 때 대비
+    private bool vfxPlayed;
+    
     [SerializeField] private float autoDestroyAfter = 5f;
     private Coroutine autoKillCo;
     
@@ -93,6 +99,7 @@ public class Arrow : MonoBehaviour
 
         if (other.CompareTag("Ground"))
         {
+            PlayVFXLocal(vfxOnGround, new Vector3(0.5f, 0, 0)); 
             flying = false;
             StopAllCoroutines();
             if (_collider2D) _collider2D.enabled = false;
@@ -112,6 +119,8 @@ public class Arrow : MonoBehaviour
         if (targetTeam == ownerTeam) 
             return;
 
+        PlayVFXLocal(vfxOnCharacter, new Vector3(0.5f, 0, 0)); 
+        
         // 데미지
         var info = new DamageInfo(damage, ownerTeam, "Arrow", transform.position, this);
         if (dmg != null)        
@@ -143,5 +152,25 @@ public class Arrow : MonoBehaviour
             yield return null;
         }
         Destroy(gameObject);
+    }
+    
+    // 이펙트
+    void PlayVFX(GameObject prefab)
+    {
+        PlayVFX(prefab, Vector3.zero);
+    }
+    
+    void PlayVFX(GameObject prefab, Vector3 worldOffset)
+    {
+        if (vfxPlayed || !prefab) return;
+        var pos = (Vector3)transform.position + worldOffset;
+        var go = Instantiate(prefab, pos, Quaternion.identity);
+        if (vfxLifetime > 0f) Destroy(go, vfxLifetime);
+        vfxPlayed = true;
+    }
+    
+    void PlayVFXLocal(GameObject prefab, Vector3 localOffset) 
+    {
+        PlayVFX(prefab, transform.TransformPoint(localOffset) - transform.position);
     }
 }

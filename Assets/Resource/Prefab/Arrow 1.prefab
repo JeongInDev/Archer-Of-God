@@ -81,10 +81,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxHeight: 2
-  travelSpeed: 8
+  arrowSpeed: 8
   minDuration: 1
   maxDuration: 3
   fadeTime: 1
+  damage: 10
+  ownerTeam: 0
+  vfxOnCharacter: {fileID: 100000, guid: 43bc6268db3143c40bf41cc5208e512f, type: 3}
+  vfxOnGround: {fileID: 100000, guid: 444048e41652f6b4e9424ba9570941d7, type: 3}
+  vfxLifetime: 1
+  autoDestroyAfter: 5
 --- !u!70 &3552290945312289027
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
