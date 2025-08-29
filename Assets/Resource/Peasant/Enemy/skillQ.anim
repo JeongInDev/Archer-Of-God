@@ -3985,14 +3985,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.46666667
-    functionName: AE_SkillQ
+    functionName: AE_Enemy_SkillQ
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.7
-    functionName: AE_EndSkillQ
+    functionName: AE_Enemy_EndSkill
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

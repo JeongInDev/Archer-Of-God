@@ -1603,7 +1603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  maxHP: 100
+  maxHP: 1000
 --- !u!114 &1186799663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1739,7 +1739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1186799662}
-  fill: {fileID: 0}
+  fill: {fileID: 1822457360}
   smooth: 1
   smoothSpeed: 8
 --- !u!1 &1312175110
@@ -2669,11 +2669,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 880315155474134825, guid: cfacb35824a0bd2499cb42c7e69e29f9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1186799663}
+      insertIndex: 5
+      addedObject: {fileID: 1186799662}
     - targetCorrespondingSourceObject: {fileID: 880315155474134825, guid: cfacb35824a0bd2499cb42c7e69e29f9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1186799662}
+      addedObject: {fileID: 1186799663}
   m_SourcePrefab: {fileID: 100100000, guid: cfacb35824a0bd2499cb42c7e69e29f9, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
