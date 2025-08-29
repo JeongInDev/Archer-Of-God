@@ -10,34 +10,46 @@ public class Player : MonoBehaviour
     public Vector2 moveInput;
     public float moveSpeed;
 
-    Rigidbody2D rb;
-    Vector3 baseScale;
-    [SerializeField] Animator anim;
+    private Rigidbody2D rb;
+    private Vector3 baseScale;
+    private Animator anim;
+    private SkillCaster caster;
     
     // 발사 관련
     [Header("Shooting")]
-    // [SerializeField] GameObject arrowPrefab;
-    // [SerializeField] Transform firePos;
-    [SerializeField] float enemyAimOffsetX = 0.5f;
+    [SerializeField] private float enemyAimOffsetX = 0.5f;
     
-    [Header("Skills")]
-    [SerializeField] SkillCaster caster;
+    // Skill
+    private bool isCasting;
+    
+    // Skill Q
+    private Transform qTargetSnapshot;
+    private bool qCastReady;
     
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         baseScale = transform.localScale;
         anim = GetComponent<Animator>();
+        caster = GetComponent<SkillCaster>();
     }
     
     private void FixedUpdate()
     {
-        Vector2 nextVec= moveInput * (moveSpeed * Time.fixedDeltaTime);
-        rb.MovePosition(rb.position + nextVec);
+        if (!isCasting)
+        {
+            Vector2 nextVec= moveInput * (moveSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + nextVec);
+        }
+        
+        // Vector2 input = isCasting ? Vector2.zero : moveInput;
+
     }
     
     private void Update()
     {
+        // Debug.Log(isCasting);
+        
         if (Input.GetKeyDown(KeyCode.Y))
         {
             AE_FireArrow();
@@ -46,10 +58,13 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
-        // 플레이어 방향 설정
-        var s = baseScale;
-        s.x *= (moveInput.x < 0f) ? +1f : -1f;
-        transform.localScale = s;
+        if (!isCasting)
+        {
+            // 플레이어 방향 설정
+            var s = baseScale;
+            s.x *= (moveInput.x < 0f) ? +1f : -1f;
+            transform.localScale = s;
+        }
         
         // 이동 애니메이션 설정 
         anim.SetFloat("isMoving", Mathf.Abs(moveInput.x));
@@ -57,16 +72,31 @@ public class Player : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        if(!isCasting)
+            moveInput = value.Get<Vector2>();
     }
 
     void OnSkillQ()
     {
-        Debug.Log("OnSkillQ");
+        if (caster == null || anim == null) return;
+
+        if (!caster.CanCast(SkillSlot.Q))
+        {
+            Debug.Log("Q - 스킬 사용 불가");
+            return;
+        }
+        Debug.Log("Q - 스킬 사용");
+        qTargetSnapshot = FindNearestEnemy();
         
-        if (caster == null) return;
-        Transform target = FindNearestEnemy(); // 임시 타깃 선정
-        caster.TryCast(SkillSlot.Q, target);
+        // 시선 오른쪽
+        var s = baseScale;
+        s.x *= -1f;
+        transform.localScale = s;
+        
+        // 애니메이션 트리거
+        anim.SetTrigger("SkillQ");
+        qCastReady = true; // 이벤트에서만 실제 발사하도록 '장전'
+        isCasting = true;
     }
     
     void OnSkillW()
@@ -139,5 +169,30 @@ public class Player : MonoBehaviour
         // var go = Instantiate(arrowPrefab, start, Quaternion.identity);
         // var arrow = go.GetComponent<Arrow>();
         // if (arrow) arrow.Launch(start, target);
+    }
+
+    void AE_SkillQ()
+    {
+        if(!qCastReady) return;
+        
+        caster.TryCast(SkillSlot.Q, qTargetSnapshot);
+        qCastReady = false;
+        qTargetSnapshot = null;
+    }
+
+    void AE_EndSkillQ()
+    {
+        Debug.Log("스킬 Q 캐스팅 끄으으으으으읕");
+
+        moveInput = Vector2.zero;
+        isCasting = false;
+    }
+    
+    // 안전장치: 객체 비활성/상태 전환 시 잔여 플래그 제거
+    void OnDisable()
+    {
+        isCasting = false;
+        qCastReady = false;
+        qTargetSnapshot = null;
     }
 }

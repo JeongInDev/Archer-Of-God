@@ -7,9 +7,7 @@ using UnityEngine.Serialization;
 public class Arrow : MonoBehaviour
 {
     [Header("Curve")]
-    // 0→1 구간에서 양끝 값이 0인 커브 (기본값: 부드러운 포물선)
-    // public AnimationCurve heightCurve = AnimationCurve.EaseInOut(0, 0, 1, 0);
-    [SerializeField] AnimationCurve heightCurve =
+    [SerializeField] private AnimationCurve heightCurve =
         new AnimationCurve(
             new Keyframe(0f,   0f, 0f, 0f),
             new Keyframe(0.5f, 1f, 0f, 0f),
@@ -17,26 +15,26 @@ public class Arrow : MonoBehaviour
         );
     
     [Header("ArrowData")]
-    [SerializeField] float maxHeight   = 2f;     // 최고점
-    [SerializeField] float arrowSpeed = 8f;     // ★ 화살 속도(유닛/초) ? 일정하게 유지
-    [SerializeField] float minDuration = 1f;     // 근거리 감성(최소 비행시간)
-    [SerializeField] float maxDuration = 3f;     // 원거리 감성(최대 비행시간)
-    [SerializeField] float fadeTime    = 2f;     // Ground 맞았을 때 페이드
-    [SerializeField] int damage = 10;         // 화살 기본 데미지
-    [SerializeField] Team ownerTeam = Team.Player; // 발사자 팀(아군 오발 방지용 선택)
+    [SerializeField] private float maxHeight   = 2f;            // 최고점
+    [SerializeField] private float arrowSpeed = 8f;             // ★ 화살 속도(유닛/초) ? 일정하게 유지
+    [SerializeField] private float minDuration = 1f;            // 근거리 감성(최소 비행시간)
+    [SerializeField] private float maxDuration = 3f;            // 원거리 감성(최대 비행시간)
+    [SerializeField] private float fadeTime    = 2f;            // Ground 맞았을 때 페이드
+    [SerializeField] private int damage = 10;                   // 화살 기본 데미지
+    [SerializeField] private Team ownerTeam = Team.Player;      // 발사자 팀(아군 오발 방지용 선택)
     
     // ★ 새로 추가: 충돌이 없으면 n초 후 자동 삭제
-    [SerializeField] float autoDestroyAfter = 5f;
-    Coroutine autoKillCo;
+    [SerializeField] private float autoDestroyAfter = 5f;
+    private Coroutine autoKillCo;
     
-    Rigidbody2D _rigidbody2D;
-    Collider2D _collider2D;
-    SpriteRenderer[] _spriteRenderers;
+    private Rigidbody2D _rigidbody2D;
+    private Collider2D _collider2D;
+    private SpriteRenderer[] _spriteRenderers;
 
     private Vector2 start;
     private Vector2 target;
     private float duration;
-    bool flying;
+    private bool flying;
     
     private void Awake()
     {

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] Team team = Team.Enemy;
-    [SerializeField] int maxHP = 100;
+    [SerializeField] private Team team = Team.Enemy;
+    [SerializeField] private int maxHP = 100;
     public int CurrentHP { get; private set; }
     public Team Team => team;
     public bool IsAlive => CurrentHP > 0;

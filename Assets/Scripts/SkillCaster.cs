@@ -111,6 +111,13 @@ public class SkillCaster : MonoBehaviour
         wDamageAddCache  = damageAdd;
     }
 
+    public bool CanCast(SkillSlot slot)
+    {
+        SkillData data = GetData(slot);
+        if (data == null) return false;
+        return GetRemainingCooldown(slot) <= 0f;
+    }
+    
     // ---- 보조 메서드들 (전부 일반 switch) ----
     SkillData GetData(SkillSlot slot)
     {
