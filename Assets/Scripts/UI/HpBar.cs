@@ -10,6 +10,20 @@ public class HpBar : MonoBehaviour
     [SerializeField] Image  fill;    
     [SerializeField] bool   hideWhenFull = false;
 
+    float baseScaleX = 1f;
+    
+    void Awake()
+    {
+        if (!target) target = GetComponentInParent<Health>();
+        if (!fill)
+        {
+            var tf = transform.Find("Health");
+            if (tf) fill = tf.GetComponent<Image>();
+        }
+
+        baseScaleX = Mathf.Abs(transform.localScale.x); // ★ 추가
+    }
+    
     private void LateUpdate()
     {
         if (!target || !fill) return;
@@ -20,10 +34,14 @@ public class HpBar : MonoBehaviour
         if (hideWhenFull)
             fill.transform.parent.gameObject.SetActive(ratio < 0.999f);
 
-        // 부모가 좌/우 반전(scale.x 음수)될 때 HP바가 뒤집히지 않게 고정
-        var s = transform.localScale;
-        s.x = Mathf.Abs(s.x);
-        transform.localScale = s;
+        var parent = transform.parent;
+        if (parent)
+        {
+            var s = transform.localScale;
+            float parentWorldSign = Mathf.Sign(parent.lossyScale.x);
+            s.x = parentWorldSign * baseScaleX;
+            transform.localScale = s;
+        }
     }
     
     int targetMaxHP()

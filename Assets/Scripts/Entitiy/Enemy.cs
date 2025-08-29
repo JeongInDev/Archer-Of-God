@@ -87,10 +87,14 @@ public class Enemy : MonoBehaviour
         if (playerTransform == null) 
             return;
 
-        // 플레이어 방향 바라보기 (기본 스프라이트가 '왼쪽' 가정)
-        var s = baseScale;
-        s.x = (playerTransform.position.x < transform.position.x) ? Mathf.Abs(s.x) : -Mathf.Abs(s.x);
-        transform.localScale = s;
+        // 멈춰 있을 때(정지 상태이거나 시전 중)만 플레이어를 보게 유지
+        bool isStopped = (state == State.Stop) || isCasting;
+        if (isStopped)
+        {
+            var s = baseScale;
+            s.x = (playerTransform.position.x < transform.position.x) ? Mathf.Abs(s.x) : -Mathf.Abs(s.x);
+            transform.localScale = s;
+        }
     }
 
     // ====== 상태 처리 ======
@@ -150,6 +154,15 @@ public class Enemy : MonoBehaviour
         else
             transform.position = new Vector3(nextX, transform.position.y, transform.position.z);
 
+        
+        // 이동 중이면 '이동 방향'을 바라보게 (기본 스프라이트가 왼쪽 보는 기준)
+        if (!Mathf.Approximately(dirX, 0f))
+        {
+            var s = baseScale;
+            s.x = (dirX > 0f) ? -Mathf.Abs(s.x) :  Mathf.Abs(s.x); // →오른쪽, ←왼쪽
+            transform.localScale = s;
+        }
+        
         if (anim)
             anim.SetFloat("isMoving", Mathf.Abs(dirX));
     }
@@ -160,6 +173,15 @@ public class Enemy : MonoBehaviour
             targetX = Random.Range(minX, maxX);
         else
             targetX = transform.position.x; // 경계가 없으면 제자리(안전)
+    }
+    
+    void FaceByMoveDir(float dirX)
+    {
+        if (Mathf.Approximately(dirX, 0f)) return;
+        var s = baseScale;
+        // 기본 스프라이트가 '왼쪽'을 보고 있다고 가정
+        s.x = (dirX > 0f) ? -Mathf.Abs(s.x) :  Mathf.Abs(s.x); // →오른쪽, ←왼쪽
+        transform.localScale = s;
     }
     
     void TryCastRandomSkillOnce()
@@ -200,14 +222,24 @@ public class Enemy : MonoBehaviour
         
         if (anim)
         {
+            var s = baseScale;
             switch (queuedSkill)
             {
                 case SkillSlot.Q: 
-                    anim.SetTrigger("SkillQ"); break;
+                    anim.SetTrigger("SkillQ"); 
+                    s.x *= 1f;
+                    transform.localScale = s;
+                    break;
                 case SkillSlot.E: 
-                    anim.SetTrigger("SkillE"); break;
+                    anim.SetTrigger("SkillE"); 
+                    s.x *= 1f;
+                    transform.localScale = s;
+                    break;
                 case SkillSlot.R: 
-                    anim.SetTrigger("SkillR"); break;
+                    anim.SetTrigger("SkillR"); 
+                    s.x *= 1f;
+                    transform.localScale = s;
+                    break;
             }
         }
     }

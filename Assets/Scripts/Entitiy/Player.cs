@@ -107,6 +107,11 @@ public class Player : MonoBehaviour
     {
         Debug.Log("OnSkillE");
      
+        // 시선 오른쪽
+        var s = baseScale;
+        s.x *= -1f;
+        transform.localScale = s;
+        
         anim.SetTrigger("SkillE");
         qCastReady = true;
         isCasting = true;
@@ -115,6 +120,11 @@ public class Player : MonoBehaviour
     void OnSkillR()
     {
         Debug.Log("OnSkillR");
+        
+        // 시선 오른쪽
+        var s = baseScale;
+        s.x *= -1f;
+        transform.localScale = s;
         
         anim.SetTrigger("SkillR");
         qCastReady = true;
