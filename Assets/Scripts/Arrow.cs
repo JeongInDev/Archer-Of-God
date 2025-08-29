@@ -94,6 +94,9 @@ public class Arrow : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log($"Arrow hit {other.name} tag:{other.tag}");
+
+        
         // ★ 충돌이 발생했으니 자동 삭제 타이머 중지
         if (autoKillCo != null) { StopCoroutine(autoKillCo); autoKillCo = null; }
 

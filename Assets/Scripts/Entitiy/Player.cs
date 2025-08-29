@@ -21,9 +21,6 @@ public class Player : MonoBehaviour
     
     // Skill
     private bool isCasting;
-    
-    // Skill Q
-    private Transform qTargetSnapshot;
     private bool qCastReady;
     
     private void Awake()
@@ -48,11 +45,9 @@ public class Player : MonoBehaviour
     
     private void Update()
     {
-        // Debug.Log(isCasting);
-        
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            AE_FireArrow();
+            
         }
     }
 
@@ -86,7 +81,7 @@ public class Player : MonoBehaviour
             return;
         }
         Debug.Log("Q - 스킬 사용");
-        qTargetSnapshot = FindNearestEnemy();
+        // qTargetSnapshot = FindNearestEnemy();
         
         // 시선 오른쪽
         var s = baseScale;
@@ -149,35 +144,25 @@ public class Player : MonoBehaviour
     void AE_FireArrow()
     {
         if (caster == null) return;                     // ← SkillCaster 필수
-        var enemyObj = GameObject.FindWithTag("Enemy");
-        if (enemyObj == null) return;
-
-        Vector2 start  = (caster.firePos ? (Vector2)caster.firePos.position : (Vector2)transform.position);
-        Vector2 target = (Vector2)enemyObj.transform.position + new Vector2(enemyAimOffsetX, 0f);
-
-        // ▼ 여기 한 줄로 발사 (나중에 W 버프 등 자동 반영됨)
-        caster.SpawnArrow(start, target);
-        
-        // if (!arrowPrefab || !firePos) return;
         // var enemyObj = GameObject.FindWithTag("Enemy");
-        // if (!enemyObj) return;
-        //
-        // Vector2 start  = firePos.position;
-        // Vector2 target = enemyObj.transform.position;
-        // target += Vector2.right * enemyAimOffsetX;
-        //
-        // var go = Instantiate(arrowPrefab, start, Quaternion.identity);
-        // var arrow = go.GetComponent<Arrow>();
-        // if (arrow) arrow.Launch(start, target);
+        // if (enemyObj == null) return;
+
+        Transform nearestEnemyTransform = FindNearestEnemy();      // ★ 매번 갱신
+        if (nearestEnemyTransform == null) return;
+        
+        Vector2 start  = (caster.firePos ? (Vector2)caster.firePos.position : (Vector2)transform.position);
+        Vector2 target = (Vector2)nearestEnemyTransform.position + new Vector2(enemyAimOffsetX, 0f);
+
+        caster.SpawnArrow(start, target);
     }
 
     void AE_SkillQ()
     {
         if(!qCastReady) return;
         
-        caster.TryCast(SkillSlot.Q, qTargetSnapshot);
+        Transform nearestEnemyTransform = FindNearestEnemy();      // ★ 매번 갱신
+        caster.TryCast(SkillSlot.Q, nearestEnemyTransform);
         qCastReady = false;
-        qTargetSnapshot = null;
     }
 
     void AE_EndSkillQ()
@@ -193,6 +178,5 @@ public class Player : MonoBehaviour
     {
         isCasting = false;
         qCastReady = false;
-        qTargetSnapshot = null;
     }
 }
