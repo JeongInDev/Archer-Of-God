@@ -6,6 +6,11 @@ public class Sword : MonoBehaviour
 {
     [SerializeField] LayerMask damageMask = ~0; // 필요 시 레이어 제한
     
+    [Header("Effects")]
+    [SerializeField] GameObject vfxFalled;  
+    [SerializeField] GameObject vfxSpark;  
+    [SerializeField] float vfxLifetime  = 5.0f;
+    private bool vfxPlayed;
     Rigidbody2D rb;
     Collider2D  col;
 
@@ -58,6 +63,9 @@ public class Sword : MonoBehaviour
 
     void Land()
     {
+        PlayVFXLocal(vfxFalled, new Vector3(0, -0.5f, 0f));
+        // PlayVFX(vfxFalled);
+
         landed = true;
         if (rb)
         {
@@ -89,6 +97,9 @@ public class Sword : MonoBehaviour
 
     void DoTick()
     {
+        // PlayVFX(vfxSpark);
+        PlayVFXLocal(vfxFalled, new Vector3(0, -0.2f, 0f));
+
         // 주변 피해
         var hits = Physics2D.OverlapCircleAll(transform.position, tickRadius, damageMask);
         for (int i = 0; i < hits.Length; i++)
@@ -96,6 +107,7 @@ public class Sword : MonoBehaviour
             if (TryGetLivingHealth(hits[i], out var hp) && hp.Team != ownerTeam)
             {
                 ApplyDamage(hp, tickDamage, "SwordRain_Tick");
+                PlayVFXLocal(vfxFalled, new Vector3(0, -0.5f, 0f));
             }
         }
     }
@@ -121,4 +133,24 @@ public class Sword : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, tickRadius);
     }
 #endif
+    
+    // 이펙트
+    void PlayVFX(GameObject prefab)
+    {
+        PlayVFX(prefab, Vector3.zero);
+    }
+    
+    void PlayVFX(GameObject prefab, Vector3 worldOffset)
+    {
+        if (vfxPlayed || !prefab) return;
+        var pos = (Vector3)transform.position + worldOffset;
+        var go = Instantiate(prefab, pos, Quaternion.identity);
+        if (vfxLifetime > 0f) Destroy(go, vfxLifetime);
+        vfxPlayed = true;
+    }
+    
+    void PlayVFXLocal(GameObject prefab, Vector3 localOffset) 
+    {
+        PlayVFX(prefab, transform.TransformPoint(localOffset) - transform.position);
+    }
 }

@@ -164,3 +164,6 @@ MonoBehaviour:
   damageMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  vfxFalled: {fileID: 1040608886635896, guid: c74b90f3e0fb82f47be8b863ccee38f2, type: 3}
+  vfxSpark: {fileID: 1628744458893394, guid: b788d30245469a14ab470b0f19330b9e, type: 3}
+  vfxLifetime: 15

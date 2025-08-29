@@ -235,6 +235,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c381e5a98453c5a468f9742098bd2e53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vfxOnGround: {fileID: 1040608886635896, guid: c74b90f3e0fb82f47be8b863ccee38f2, type: 3}
+  vfxLifetime: 1
 --- !u!50 &5147613352233178758
 Rigidbody2D:
   serializedVersion: 4

@@ -334,6 +334,11 @@ MonoBehaviour:
   moveInput: {x: 0, y: 0}
   moveSpeed: 3
   enemyAimOffsetX: 0.5
+  vfxSKillQ: {fileID: 100006, guid: acb964b3a0ff6584cb7c77ba752d0670, type: 3}
+  vfxSKillW: {fileID: 100006, guid: acb964b3a0ff6584cb7c77ba752d0670, type: 3}
+  vfxSKillE: {fileID: 100000, guid: 1d2b730664efab940ba43cd6278b2664, type: 3}
+  vfxSKillR: {fileID: 100000, guid: 1d2b730664efab940ba43cd6278b2664, type: 3}
+  vfxLifetime: 1
 --- !u!1 &1425326062548074746
 GameObject:
   m_ObjectHideFlags: 0
